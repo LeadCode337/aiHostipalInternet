@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.article.mapper.PubArticleMapper">
+    
+    <resultMap type="PubArticle" id="PubArticleResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="category"    column="category"    />
+        <result property="status"    column="status"    />
+        <result property="hotOrder"    column="hot_order"    />
+        <result property="likeNum"    column="like_num"    />
+        <result property="saveNum"    column="save_num"    />
+        <result property="uploadTime"    column="upload_time"    />
+        <result property="removedTime"    column="removed_time"    />
+    </resultMap>
+
+    <sql id="selectPubArticleVo">
+        select id, title, content, category, status, hot_order, like_num, save_num, upload_time, removed_time from pub_article
+    </sql>
+
+    <select id="selectPubArticleList" parameterType="PubArticle" resultMap="PubArticleResult">
+        <include refid="selectPubArticleVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="hotOrder != null "> and hot_order = #{hotOrder}</if>
+            <if test="likeNum != null "> and like_num = #{likeNum}</if>
+            <if test="saveNum != null "> and save_num = #{saveNum}</if>
+            <if test="uploadTime != null "> and upload_time = #{uploadTime}</if>
+            <if test="removedTime != null "> and removed_time = #{removedTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectPubArticleById" parameterType="Long" resultMap="PubArticleResult">
+        <include refid="selectPubArticleVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPubArticle" parameterType="PubArticle" useGeneratedKeys="true" keyProperty="id">
+        insert into pub_article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="content != null">content,</if>
+            <if test="category != null">category,</if>
+            <if test="status != null">status,</if>
+            <if test="hotOrder != null">hot_order,</if>
+            <if test="likeNum != null">like_num,</if>
+            <if test="saveNum != null">save_num,</if>
+            <if test="uploadTime != null">upload_time,</if>
+            <if test="removedTime != null">removed_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="category != null">#{category},</if>
+            <if test="status != null">#{status},</if>
+            <if test="hotOrder != null">#{hotOrder},</if>
+            <if test="likeNum != null">#{likeNum},</if>
+            <if test="saveNum != null">#{saveNum},</if>
+            <if test="uploadTime != null">#{uploadTime},</if>
+            <if test="removedTime != null">#{removedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePubArticle" parameterType="PubArticle">
+        update pub_article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="hotOrder != null">hot_order = #{hotOrder},</if>
+            <if test="likeNum != null">like_num = #{likeNum},</if>
+            <if test="saveNum != null">save_num = #{saveNum},</if>
+            <if test="uploadTime != null">upload_time = #{uploadTime},</if>
+            <if test="removedTime != null">removed_time = #{removedTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePubArticleById" parameterType="Long">
+        delete from pub_article where id = #{id}
+    </delete>
+
+    <delete id="deletePubArticleByIds" parameterType="String">
+        delete from pub_article where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
