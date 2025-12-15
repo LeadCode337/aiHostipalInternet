@@ -9,53 +9,25 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="文章分类" prop="category">
-        <el-input
-          v-model="queryParams.category"
-          placeholder="请输入文章分类"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="类型" prop="category">
+        <el-select v-model="queryParams.category" placeholder="请选择类型" clearable>
+          <el-option
+            v-for="dict in dict.type.sys_article_category"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item label="热推顺序,数值越小排序越靠前" prop="hotOrder">
-        <el-input
-          v-model="queryParams.hotOrder"
-          placeholder="请输入热推顺序,数值越小排序越靠前"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="点赞数量" prop="likeNum">
-        <el-input
-          v-model="queryParams.likeNum"
-          placeholder="请输入点赞数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="收藏数量" prop="saveNum">
-        <el-input
-          v-model="queryParams.saveNum"
-          placeholder="请输入收藏数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="文章上传日期" prop="uploadTime">
-        <el-date-picker clearable
-          v-model="queryParams.uploadTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择文章上传日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="文章下架日期" prop="removedTime">
-        <el-date-picker clearable
-          v-model="queryParams.removedTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择文章下架日期">
-        </el-date-picker>
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+          <el-option
+            v-for="dict in dict.type.sys_article_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -71,7 +43,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['article:article:add']"
+          v-hasPermi="['hospital:article:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -82,7 +54,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['article:article:edit']"
+          v-hasPermi="['hospital:article:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -93,7 +65,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['article:article:remove']"
+          v-hasPermi="['hospital:article:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -103,7 +75,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['article:article:export']"
+          v-hasPermi="['hospital:article:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -111,22 +83,21 @@
 
     <el-table v-loading="loading" :data="articleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="文章唯一标识" align="center" prop="id" />
+      <el-table-column label="序号" align="center" prop="id" />
       <el-table-column label="文章标题" align="center" prop="title" />
-      <el-table-column label="文章详细内容" align="center" prop="content" />
-      <el-table-column label="文章分类" align="center" prop="category" />
-      <el-table-column label="文章状态('0'待审核,'1'已发布,'2'已下架)" align="center" prop="status" />
-      <el-table-column label="热推顺序,数值越小排序越靠前" align="center" prop="hotOrder" />
-      <el-table-column label="点赞数量" align="center" prop="likeNum" />
-      <el-table-column label="收藏数量" align="center" prop="saveNum" />
+      <el-table-column label="类型" align="center" prop="category">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_article_category" :value="scope.row.category"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_article_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
       <el-table-column label="文章上传日期" align="center" prop="uploadTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.uploadTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="文章下架日期" align="center" prop="removedTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.removedTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -136,14 +107,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['article:article:edit']"
+            v-hasPermi="['hospital:article:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['article:article:remove']"
+            v-hasPermi="['hospital:article:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -157,17 +128,34 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改健康宣教文章对话框 -->
+    <!-- 添加或修改宣传中心对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="文章标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入文章标题" />
         </el-form-item>
-        <el-form-item label="文章详细内容">
+        <el-form-item label="文章内容">
           <editor v-model="form.content" :min-height="192"/>
         </el-form-item>
-        <el-form-item label="文章分类" prop="category">
-          <el-input v-model="form.category" placeholder="请输入文章分类" />
+        <el-form-item label="类型" prop="category">
+          <el-select v-model="form.category" placeholder="请选择类型">
+            <el-option
+              v-for="dict in dict.type.sys_article_category"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择状态">
+            <el-option
+              v-for="dict in dict.type.sys_article_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="热推顺序,数值越小排序越靠前" prop="hotOrder">
           <el-input v-model="form.hotOrder" placeholder="请输入热推顺序,数值越小排序越靠前" />
@@ -204,10 +192,11 @@
 </template>
 
 <script>
-import { listArticle, getArticle, delArticle, addArticle, updateArticle } from "@/api/article/article"
+import { listArticle, getArticle, delArticle, addArticle, updateArticle } from "@/api/hospital/article"
 
 export default {
   name: "Article",
+  dicts: ['sys_article_category', 'sys_article_status'],
   data() {
     return {
       // 遮罩层
@@ -222,7 +211,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 健康宣教文章表格数据
+      // 宣传中心表格数据
       articleList: [],
       // 弹出层标题
       title: "",
@@ -233,14 +222,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         title: null,
-        content: null,
         category: null,
         status: null,
-        hotOrder: null,
-        likeNum: null,
-        saveNum: null,
-        uploadTime: null,
-        removedTime: null
       },
       // 表单参数
       form: {},
@@ -256,7 +239,7 @@ export default {
     this.getList()
   },
   methods: {
-    /** 查询健康宣教文章列表 */
+    /** 查询宣传中心列表 */
     getList() {
       this.loading = true
       listArticle(this.queryParams).then(response => {
@@ -306,7 +289,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加健康宣教文章"
+      this.title = "添加宣传中心"
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -315,7 +298,7 @@ export default {
       getArticle(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改健康宣教文章"
+        this.title = "修改宣传中心"
       })
     },
     /** 提交按钮 */
@@ -341,7 +324,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除健康宣教文章编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除宣传中心编号为"' + ids + '"的数据项？').then(function() {
         return delArticle(ids)
       }).then(() => {
         this.getList()
@@ -350,7 +333,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('article/article/export', {
+      this.download('hospital/article/export', {
         ...this.queryParams
       }, `article_${new Date().getTime()}.xlsx`)
     }

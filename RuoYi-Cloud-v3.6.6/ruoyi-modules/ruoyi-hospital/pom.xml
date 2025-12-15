@@ -8,6 +8,7 @@
     </parent>
 
     <artifactId>ruoyi-modules-hospital</artifactId>
+<<<<<<< HEAD
 
 
     <name>ruoyi-hospital</name>
@@ -15,6 +16,11 @@
 
     <description>
         ruoyi-modules-hospital医院系统模块
+=======
+
+    <description>
+        ruoyi-modules-hospital医院普通模块
+>>>>>>> c21703109a62b0b3363af8b17c5800f102e7b47b
     </description>
     <dependencies>
 
