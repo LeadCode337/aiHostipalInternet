@@ -12,7 +12,7 @@
       <el-form-item label="类型" prop="category">
         <el-select v-model="queryParams.category" placeholder="请选择类型" clearable>
           <el-option
-            v-for="dict in dict.type.hos_article_category"
+            v-for="dict in dict.type.sys_article_category"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -22,7 +22,7 @@
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
           <el-option
-            v-for="dict in dict.type.hos_article_status"
+            v-for="dict in dict.type.sys_article_status"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -66,7 +66,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['hospital:article:remove']"
-        >下架</el-button>
+        >删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -87,12 +87,12 @@
       <el-table-column label="文章标题" align="center" prop="title" />
       <el-table-column label="类型" align="center" prop="category">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.hos_article_category" :value="scope.row.category"/>
+          <dict-tag :options="dict.type.sys_article_category" :value="scope.row.category"/>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.hos_article_status" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.sys_article_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="文章上传日期" align="center" prop="uploadTime" width="180">
@@ -115,11 +115,11 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['hospital:article:remove']"
-          >下架</el-button>
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -140,12 +140,31 @@
         <el-form-item label="类型" prop="category">
           <el-select v-model="form.category" placeholder="请选择类型">
             <el-option
-              v-for="dict in dict.type.hos_article_category"
+              v-for="dict in dict.type.sys_article_category"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择状态">
+            <el-option
+              v-for="dict in dict.type.sys_article_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="热推顺序,数值越小排序越靠前" prop="hotOrder">
+          <el-input v-model="form.hotOrder" placeholder="请输入热推顺序,数值越小排序越靠前" />
+        </el-form-item>
+        <el-form-item label="点赞数量" prop="likeNum">
+          <el-input v-model="form.likeNum" placeholder="请输入点赞数量" />
+        </el-form-item>
+        <el-form-item label="收藏数量" prop="saveNum">
+          <el-input v-model="form.saveNum" placeholder="请输入收藏数量" />
         </el-form-item>
         <el-form-item label="文章上传日期" prop="uploadTime">
           <el-date-picker clearable
@@ -177,7 +196,7 @@ import { listArticle, getArticle, delArticle, addArticle, updateArticle } from "
 
 export default {
   name: "Article",
-  dicts: ['hos_article_category', 'hos_article_status'],
+  dicts: ['sys_article_category', 'sys_article_status'],
   data() {
     return {
       // 遮罩层
