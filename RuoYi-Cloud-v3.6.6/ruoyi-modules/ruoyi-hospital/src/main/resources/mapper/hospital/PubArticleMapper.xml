@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectPubArticleList" parameterType="PubArticle" resultMap="PubArticleResult">
         <include refid="selectPubArticleVo"/>
         <where>  
-            <if test="title != null  and title != ''"> and title like concat('%',#{title},'%')</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
             <if test="category != null  and category != ''"> and category = #{category}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
