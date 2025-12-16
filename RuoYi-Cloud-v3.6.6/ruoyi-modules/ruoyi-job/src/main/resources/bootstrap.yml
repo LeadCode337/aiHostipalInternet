@@ -13,7 +13,7 @@ spring:
   cloud:
     nacos:
       username: nacos  # 通常默认是 nacos
-      password: nacos  # 通常默认是 nacos
+      password: fourProject  # 通常默认是 nacos
       discovery:
         # 服务注册地址
         server-addr: 115.190.243.190:8848
