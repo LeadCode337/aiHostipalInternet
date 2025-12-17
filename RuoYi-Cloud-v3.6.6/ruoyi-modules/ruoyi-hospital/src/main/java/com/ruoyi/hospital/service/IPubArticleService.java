@@ -7,7 +7,7 @@ import com.ruoyi.hospital.domain.PubArticle;
  * 宣传中心Service接口
  * 
  * @author ruoyi
- * @date 2025-12-13
+ * @date 2025-12-16
  */
 public interface IPubArticleService 
 {

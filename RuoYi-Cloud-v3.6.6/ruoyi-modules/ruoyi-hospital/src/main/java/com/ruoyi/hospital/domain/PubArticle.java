@@ -11,7 +11,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * 宣传中心对象 pub_article
  * 
  * @author ruoyi
- * @date 2025-12-13
+ * @date 2025-12-16
  */
 public class PubArticle extends BaseEntity
 {
@@ -36,7 +36,7 @@ public class PubArticle extends BaseEntity
     @Excel(name = "状态")
     private String status;
 
-    /** 热推顺序,数值越小排序越靠前 */
+    /** 热推顺序 */
     private Long hotOrder;
 
     /** 点赞数量 */

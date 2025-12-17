@@ -11,7 +11,7 @@ import com.ruoyi.hospital.service.IPubArticleService;
  * 宣传中心Service业务层处理
  * 
  * @author ruoyi
- * @date 2025-12-13
+ * @date 2025-12-16
  */
 @Service
 public class PubArticleServiceImpl implements IPubArticleService 
