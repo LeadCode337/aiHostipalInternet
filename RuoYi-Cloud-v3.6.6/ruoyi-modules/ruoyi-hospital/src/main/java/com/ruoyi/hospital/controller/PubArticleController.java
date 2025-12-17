@@ -26,7 +26,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  * 宣传中心Controller
  * 
  * @author ruoyi
- * @date 2025-12-16
+ * @date 2025-12-13
  */
 @RestController
 @RequestMapping("/article")

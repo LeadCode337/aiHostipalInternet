@@ -16,17 +16,10 @@ spring:
       password: nacos  # 通常默认是 nacos
       discovery:
         # 服务注册地址
-<<<<<<< HEAD
         server-addr: localhost:8848
       config:
         # 配置中心地址
         server-addr: localhost:8848
-=======
-        server-addr: 127.0.0.1:8848
-      config:
-        # 配置中心地址
-        server-addr: 127.0.0.1:8848
->>>>>>> 82a7e7619a92fbcb5d0f96fbba6d0c008c67ea1e
         # 配置文件格式
         file-extension: yml
         # 共享配置
