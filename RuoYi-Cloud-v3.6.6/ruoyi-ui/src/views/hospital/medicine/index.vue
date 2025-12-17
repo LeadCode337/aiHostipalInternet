@@ -2,20 +2,26 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="药品名称" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入药品名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.name" placeholder="请输入药品名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label="药品生产厂商" prop="manufacturer">
-        <el-input
-          v-model="queryParams.manufacturer"
-          placeholder="请输入药品生产厂商"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="生产厂商" prop="manufacturer">
+        <el-input v-model="queryParams.manufacturer" placeholder="请输入药品生产厂商" clearable
+          @keyup.enter.native="handleQuery" />
+      </el-form-item>
+      <!-- 新增药品类型下拉框 -->
+      <el-form-item label="药品类型" prop="type">
+        <el-select v-model="queryParams.type" placeholder="请选择药品类型" clearable @change="handleQuery">
+          <el-option label="处方药" value="0" />
+          <el-option label="非处方药" value="1" />
+        </el-select>
+      </el-form-item>
+      <!-- 新增药品状态下拉框 -->
+      <el-form-item label="药品状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择药品状态" clearable @change="handleQuery">
+          <el-option label="在售" value="0" />
+          <el-option label="下架" value="1" />
+          <el-option label="删除" value="2" />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -25,46 +31,20 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['hospital:medicine:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+          v-hasPermi="['hospital:medicine:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['hospital:medicine:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['hospital:medicine:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['hospital:medicine:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['hospital:medicine:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['hospital:medicine:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['hospital:medicine:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -82,43 +62,23 @@
       <el-table-column label="药品状态" align="center" prop="status" />
       <el-table-column label="图片" align="center" prop="imageUrl">
         <template slot-scope="scope">
-          <el-image 
-            v-if="scope.row.imageUrl" 
-            :src="scope.row.imageUrl" 
-            style="width: 50px; height: 50px" 
-            fit="cover"
-            preview-src-list="[scope.row.imageUrl]"
-          />
+          <el-image v-if="scope.row.imageUrl" :src="scope.row.imageUrl" style="width: 50px; height: 50px" fit="cover"
+            preview-src-list="[scope.row.imageUrl]" />
           <span v-else>无图片</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['hospital:medicine:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['hospital:medicine:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['hospital:medicine:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['hospital:medicine:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改药品库存对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
