@@ -71,6 +71,11 @@
             <artifactId>ruoyi-common-swagger</artifactId>
         </dependency>
 
+        <!-- RuoYi Common Core -->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-common-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
