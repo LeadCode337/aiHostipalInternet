@@ -1,12 +1,10 @@
 package com.ruoyi.hospital.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.hospital.domain.SysDoctor;
 import com.ruoyi.hospital.service.ISysDoctorService;
-import com.ruoyi.hospital.util.OcrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
