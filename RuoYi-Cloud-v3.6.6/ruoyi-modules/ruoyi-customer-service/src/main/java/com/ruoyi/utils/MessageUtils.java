@@ -1,7 +1,7 @@
-package com.huanf.utils;
+package com.ruoyi.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.huanf.ws.pojo.ResultMessage;
+import com.ruoyi.ws.pojo.ResultMessage;
 
 public class MessageUtils {
 

@@ -1,9 +1,9 @@
-package com.ruoyi.system;
+package com.ruoyi;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.ruoyi.common.security.annotation.EnableCustomConfig;
 import com.ruoyi.common.security.annotation.EnableRyFeignClients;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * 系统模块
@@ -13,12 +13,12 @@ import com.ruoyi.common.security.annotation.EnableRyFeignClients;
 @EnableCustomConfig
 @EnableRyFeignClients
 @SpringBootApplication
-public class RuoYiSystemApplication
+public class RuoYiCustomerServiceApplication
 {
     public static void main(String[] args)
     {
-        SpringApplication.run(RuoYiSystemApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  系统模块启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
+        SpringApplication.run(RuoYiCustomerServiceApplication.class, args);
+        System.out.println("(♥◠‿◠)ﾉﾞ  客服模块启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
                 " .-------.       ____     __        \n" +
                 " |  _ _   \\      \\   \\   /  /    \n" +
                 " | ( ' )  |       \\  _. /  '       \n" +

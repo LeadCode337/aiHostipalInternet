@@ -1,4 +1,4 @@
-package com.huanf.ws.pojo;
+package com.ruoyi.ws.pojo;
 
 import lombok.Data;
 
