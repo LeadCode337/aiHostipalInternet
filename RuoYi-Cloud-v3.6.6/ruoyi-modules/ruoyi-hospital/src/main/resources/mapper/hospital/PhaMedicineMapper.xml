@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.hospital.mapper.PhaMedicineMapper">
+
+    <resultMap type="PhaMedicine" id="PhaMedicineResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="medicineTagId" column="medicine_tag_id"/>
+        <result property="price" column="price"/>
+        <result property="stock" column="stock"/>
+        <result property="threshold" column="threshold"/>
+        <result property="manufacturer" column="manufacturer"/>
+        <result property="status" column="status"/>
+        <result property="imageUrl" column="image_url"/>
+    </resultMap>
+
+    <sql id="selectPhaMedicineVo">
+        select id,
+               name,
+               type,
+               medicine_tag_id,
+               price,
+               stock,
+               threshold,
+               manufacturer,
+               status,
+               image_url,
+               content
+        from pha_medicine
+    </sql>
+
+    <select id="selectPhaMedicineList" parameterType="PhaMedicine" resultMap="PhaMedicineResult">
+        select pm.id,
+        name,
+        type,
+        medicine_tag_id,
+        price,
+        stock,
+        threshold,
+        manufacturer,
+        status,
+        image_url,
+        content
+        from pha_medicine
+        pm LEFT JOIN medicine_tag mt ON pm.medicine_tag_id = mt.id
+        <where>
+            <!-- 所有条件字段加主表别名pm，避免歧义 -->
+            <if test="name != null and name != ''">
+                and pm.name like concat('%', #{name}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                and pm.type = #{type}
+            </if>
+            <if test="medicineTagId != null">
+                and pm.medicine_tag_id = #{medicineTagId}
+            </if>
+            <if test="manufacturer != null and manufacturer != ''">
+                and pm.manufacturer like concat('%', #{manufacturer}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and pm.status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPhaMedicineById" parameterType="Long" resultMap="PhaMedicineResult">
+        <include refid="selectPhaMedicineVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPhaMedicine" parameterType="PhaMedicine" useGeneratedKeys="true" keyProperty="id">
+        insert into pha_medicine
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,
+            </if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="medicineTagId != null">medicine_tag_id,</if>
+            <if test="price != null">price,</if>
+            <if test="stock != null">stock,</if>
+            <if test="threshold != null">threshold,</if>
+            <if test="manufacturer != null and manufacturer != ''">manufacturer,</if>
+            <if test="status != null">status,</if>
+            <if test="imageUrl != null">image_url,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},
+            </if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="medicineTagId != null">#{medicineTagId},</if>
+            <if test="price != null">#{price},</if>
+            <if test="stock != null">#{stock},</if>
+            <if test="threshold != null">#{threshold},</if>
+            <if test="manufacturer != null and manufacturer != ''">#{manufacturer},</if>
+            <if test="status != null">#{status},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePhaMedicine" parameterType="PhaMedicine">
+        update pha_medicine
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="medicineTagId != null">medicine_tag_id = #{medicineTagId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="stock != null">stock = #{stock},</if>
+            <if test="threshold != null">threshold = #{threshold},</if>
+            <if test="manufacturer != null and manufacturer != ''">manufacturer = #{manufacturer},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePhaMedicineById" parameterType="Long">
+        delete
+        from pha_medicine
+        where id = #{id}
+    </delete>
+
+    <delete id="deletePhaMedicineByIds" parameterType="String">
+        delete from pha_medicine where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
